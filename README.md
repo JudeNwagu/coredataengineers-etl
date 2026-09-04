@@ -34,6 +34,25 @@ see `.gitignore`):
 Every step prints a status message so progress is visible in the terminal
 (or in the cron log file).
 
+
+### Example output
+
+A sample of the actual transformed data (`Transformed/2023_year_finance.csv`
+and `Gold/2023_year_finance.csv` — Load produces an identical copy):
+
+    year,Value,Units,variable_code
+    2023,930995,Dollars (millions),H01
+    2023,821630,Dollars (millions),H04
+    2023,84354,Dollars (millions),H05
+    2023,25010,Dollars (millions),H07
+    2023,832964,Dollars (millions),H08
+
+Note: some `Value` fields in the full file contain thousands-separator
+commas (e.g. `"728,225"`) and are correctly wrapped in quotes to keep the
+CSV valid — see "Notes on the Transform step" below for how this is
+handled.
+
+
 ### Why an environment variable for the URL?
 
 Hard-coding a URL inside a script is bad practice — the URL might change,
