@@ -145,3 +145,25 @@ else
     echo "ERROR: Transform step failed."
     exit 1
 fi
+
+echo "Load step starting..."
+
+# Create the Gold/ folder if it doesn't already exist.
+mkdir -p Gold
+
+# --------------------------------------------------------------------------
+# LOAD: copy the transformed file into the Gold/ folder.
+# This represents moving the cleaned data into its final destination,
+# ready for consumption (reporting, analysis, etc.).
+# --------------------------------------------------------------------------
+cp Transformed/2023_year_finance.csv Gold/
+
+# Confirm the file actually landed in Gold/.
+if [ -s Gold/2023_year_finance.csv ]; then
+    echo "CONFIRMED: File successfully loaded into Gold/."
+else
+    echo "ERROR: Load step failed."
+    exit 1
+fi
+
+echo "ETL pipeline completed successfully."
