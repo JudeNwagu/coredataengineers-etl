@@ -26,3 +26,42 @@ if [ ! -d "$SOURCE_DIR" ]; then
     echo "ERROR: Source folder '$SOURCE_DIR' does not exist."
     exit 1
 fi
+
+# Create the destination folder if it doesn't already exist.
+mkdir -p "$DEST_DIR"
+
+# --------------------------------------------------------------------------
+# Find and move all .csv and .json files (case-insensitive) from the
+# source folder into the destination folder.
+# --------------------------------------------------------------------------
+# shopt sets shell options:
+#   nullglob   -> if a pattern like *.csv matches nothing, it expands to
+#                 NOTHING instead of the literal text "*.csv". Without
+#                 this, if there were zero CSV files, the script would
+#                 try to move a file literally named "*.csv" and fail.
+#   nocaseglob -> matches .csv/.CSV/.Csv and .json/.JSON the same way,
+#                 so file extension casing doesn't matter.
+shopt -s nullglob nocaseglob
+
+# Build an array of every matching file found in the source folder.
+files=("$SOURCE_DIR"/*.csv "$SOURCE_DIR"/*.json)
+
+# ${#files[@]} gives the number of items in the array.
+# If it's zero, there's nothing to move -- exit cleanly, not as an error,
+# since "no matching files" isn't necessarily a failure.
+if [ ${#files[@]} -eq 0 ]; then
+    echo "No CSV or JSON files found in '$SOURCE_DIR'. Nothing to move."
+    exit 0
+fi
+
+echo "Found ${#files[@]} file(s) to move."
+
+# Move every file found. -v (verbose) prints what it's doing as it goes,
+# which doubles as our "confirmation" that each file actually moved.
+moved_count=0
+for f in "${files[@]}"; do
+    mv -v "$f" "$DEST_DIR"/
+    moved_count=$((moved_count + 1))
+done
+
+echo "CONFIRMED: Moved $moved_count file(s) into '$DEST_DIR'."
