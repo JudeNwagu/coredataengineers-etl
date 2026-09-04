@@ -48,8 +48,14 @@ confusing way.
 
 ### How to run it
 
-    export CSV_URL="https://www.stats.govt.nz/assets/Uploads/Annual-enterprise-survey/Annual-enterprise-survey-2023-financial-year-provisional/Download-data/annual-enterprise-survey-2023-financial-year-provisional.csv"
+    export CSV_URL="<your-csv-source-url>"
     chmod +x etl.sh
+    ./etl.sh
+
+Example using the actual New Zealand Stats dataset this project was built
+and tested against:
+
+    export CSV_URL="https://www.stats.govt.nz/assets/Uploads/Annual-enterprise-survey/Annual-enterprise-survey-2023-financial-year-provisional/Download-data/annual-enterprise-survey-2023-financial-year-provisional.csv"
     ./etl.sh
 
 ### Notes on the Transform step
@@ -89,6 +95,10 @@ time fields, followed by the command to run:
 Add this line (using the absolute path — cron does not know your shell's
 working directory, and does not load your `~/.bashrc`, so `CSV_URL` must
 be set inline):
+
+    0 0 * * * CSV_URL="<your-csv-source-url>" /path/to/your/etl.sh >> /path/to/your/etl.log 2>&1
+
+Actual entry used for this project:
 
     0 0 * * * CSV_URL="https://www.stats.govt.nz/assets/Uploads/Annual-enterprise-survey/Annual-enterprise-survey-2023-financial-year-provisional/Download-data/annual-enterprise-survey-2023-financial-year-provisional.csv" /home/judoski/coredataengineers-etl/etl.sh >> /home/judoski/coredataengineers-etl/etl.log 2>&1
 
